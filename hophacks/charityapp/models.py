@@ -8,7 +8,7 @@ from django.contrib.auth.models import User
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     customer_id = models.TextField()
-    charity_account_id = models.TextField(default="");
+    charity_account_id = models.TextField(default="")
 
     class Meta:
         ordering = ('customer_id',)
