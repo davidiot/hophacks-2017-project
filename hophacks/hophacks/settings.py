@@ -86,7 +86,7 @@ DATABASES = {
         'USER': 'postgres',
         'PASSWORD': 'whalewatching',
         'HOST': 'colab-sbx-92.oit.duke.edu',
-        'PORT': '5432',
+        'PORT': '',
     }
 }
 
