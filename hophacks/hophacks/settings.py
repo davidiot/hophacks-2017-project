@@ -73,10 +73,20 @@ WSGI_APPLICATION = 'hophacks.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.10/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': os.path.join(BASE_DIR, 'hophacks_db'),
+#     }
+# }
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.path.join(BASE_DIR, 'hophacks_db'),
+        'NAME': 'hophacks_db',
+        'USER': 'postgres',
+        'PASSWORD': 'whalewatching',
+        'HOST': 'colab-sbx-92.oit.duke.edu',
+        'PORT': '5432',
     }
 }
 
