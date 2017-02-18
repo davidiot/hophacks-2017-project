@@ -83,7 +83,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'hophacks_db',
-        'USER': 'postgres',
+        'USER': 'andrew',
         'PASSWORD': 'whalewatching',
         'HOST': 'colab-sbx-92.oit.duke.edu',
         'PORT': '',
