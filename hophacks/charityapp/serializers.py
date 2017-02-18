@@ -14,11 +14,24 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = User
-        fields = ('url', 'username', 'email', 'groups', 'profile')
+        fields = ('url', 'id', 'username', 'password', 'email', 'is_staff',
+                  'groups', 'profile')
+        extra_kwargs = {'password': {'write_only': True}}
 
     def create(self, validated_data):
+        username = validated_data.get('username')
+        password = validated_data.get('password')
+        email = validated_data.get('email')
+        is_staff = validated_data.get('is_staff')
         profile_data = validated_data.pop('profile')
-        user = User.objects.create(**validated_data)
+        user = User.objects.create_superuser(
+            username=username,
+            password=password,
+            email=email) \
+            if is_staff else User.objects.create_user(
+            username=username,
+            password=password,
+            email=email)
         Profile.objects.create(user=user, **profile_data)
         return user
 
@@ -31,7 +44,7 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
 
         instance.username = validated_data.get('username', instance.username)
         instance.email = validated_data.get('email', instance.email)
-        instance.email = validated_data.get('groups', instance.groups)
+        instance.groups = validated_data.get('groups', instance.groups)
         instance.save()
 
         profile.customer_id = profile_data.get(
