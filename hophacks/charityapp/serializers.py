@@ -66,30 +66,31 @@ class GroupSerializer(serializers.HyperlinkedModelSerializer):
 class SectorSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Sector
-        fields = ('name', 'national_average')
+        fields = ('url', 'id', 'name', 'national_average')
 
 
 class CharitySerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Charity
-        fields = ('merchant_id', 'picture', 'description', 'link', 'email',
+        fields = ('url', 'id', 'merchant_id', 'picture', 'description', 'link', 'email',
                   'name', 'sector')
 
 
 class LinkSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Link
-        fields = ('purchase_id', 'transfer_id', 'sector')
+        fields = ('url', 'id', 'purchase_id', 'transfer_id', 'sector')
 
 
 class RuleSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Link
-        fields = ('user', 'sector', 'rate')
+        fields = ('url', 'id', 'user', 'sector', 'rate')
 
 
 class SuggestionSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Link
-        fields = ('name', 'sector', 'picture', 'description', 'rule_creator',
+        fields = ('url', 'id', 'name', 'sector', 'picture', 'description',
+                  'rule_creator',
                   'threshold')
