@@ -1,17 +1,55 @@
 from rest_framework.response import Response
-from .models import Link, Sector, Rule
-from .serializers import LinkSerializer
+from .models import Link, Sector, Rule, Charity
+from .serializers import LinkSerializer, CharitySerializer
 from rest_framework.decorators import api_view
 import datetime
 import requests
 import json
 from django.http import HttpResponse
 
-sector_map = {'Clothing': 'Clothing',
-              'Lodging': 'Travel',
-              'Food': 'Food',
-              'Health': 'Health',
-              'Tech': 'Technology'}
+sector_map = {
+    'Clothing': 'Clothing',
+    'Lodging': 'Travel',
+    'Food': 'Food',
+    'Health': 'Health',
+    'Tech': 'Technology'
+}
+
+charity_map = {
+    'Clothing': 'Clothing',
+    'Travel': 'Environment',
+    'Food': 'Food',
+    'Health': 'Health',
+    'Technology': 'Tech'
+}
+
+
+@api_view(['GET'])
+def get_charities_by_name(request, sect):
+    sector = Sector.objects.get(
+        name=sect
+    )
+    charities = Charity.objects.filter(sector=sector)
+    serializer = CharitySerializer(
+        charities,
+        context={'request': request},
+        many=True
+    )
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+def get_charities_by_id(request, id):
+    sector = Sector.objects.get(
+        id=id
+    )
+    charities = Charity.objects.filter(sector=sector)
+    serializer = CharitySerializer(
+        charities,
+        context={'request': request},
+        many=True
+    )
+    return Response(serializer.data)
 
 
 @api_view(['GET'])
