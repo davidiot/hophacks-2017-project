@@ -28,6 +28,20 @@ api_key = '52f69545ffa7fffb30dc369ac3103f7f'
 
 
 @api_view(['GET'])
+def get_my_donations(request):
+    current_user = request.user
+    my_donations = Donation.objects.filter(
+        user=current_user
+    )
+    serializer = DonationSerializer(
+        my_donations,
+        context={'request': request},
+        many=True
+    )
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
 def get_my_id(request):
     current_user = request.user
     serializer = UserSerializer(
