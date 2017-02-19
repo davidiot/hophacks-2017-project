@@ -52,6 +52,11 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
             'customer_id',
             profile.customer_id
         )
+        profile.charity_account_id = profile_data.get(
+            'charity_account_id',
+            profile.charity_account_id
+        )
+
         profile.save()
 
         return instance
