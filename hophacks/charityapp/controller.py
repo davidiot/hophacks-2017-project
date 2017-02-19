@@ -195,17 +195,20 @@ def get_links_from_c1(request, serialize=True):
                     headers={'content-type': 'application/json'},
                 ).json()
                 merchant_category = merchant_response['category']
+                merchant_name = merchant_response['name']
                 sect = Sector.objects.get(
                     name=sector_map[merchant_category[0]]
                 )
+                date = datetime.datetime.now().strftime("%Y-%m-%d")
                 trans = ""
+                purchase_amount = purchase['amount']
+                transfer_amount = 0
                 try:
                     rule = Rule.objects.get(
                         sector=sect,
                         user=current_user
                     )
-                    date = datetime.datetime.now().strftime("%Y-%m-%d")
-                    purchase_amount = purchase['amount']
+                    transfer_amount = purchase_amount * float(rule.rate)
                     payload = {
                         "medium": "balance",
                         "payee_id": str(
@@ -217,7 +220,7 @@ def get_links_from_c1(request, serialize=True):
                                        " purchase of ${} from {}".format(
                             current_user.username,
                             purchase_amount,
-                            merchant_response['name']
+                            merchant_name
                         )
                     }
                     transfer_url = \
@@ -235,7 +238,11 @@ def get_links_from_c1(request, serialize=True):
                 links.append(Link.objects
                              .create(purchase_id=purchase['_id'],
                                      transfer_id=trans,
-                                     sector=sect))
+                                     sector=sect,
+                                     merchant=merchant_name,
+                                     date=date,
+                                     purchase_amount=purchase_amount,
+                                     transfer_amount=transfer_amount))
     if not serialize:
         return links
     serializer = LinkSerializer(links,
