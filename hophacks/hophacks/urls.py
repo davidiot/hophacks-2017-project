@@ -13,11 +13,28 @@ Including another URLconf
     1. Import the include() function: from django.conf.urls import url, include
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
-from django.conf.urls import include, url
 from django.contrib import admin
+from django.conf.urls import url, include
+from rest_framework import routers
+from charityapp import views
 
+router = routers.DefaultRouter()
+router.register(r'users', views.UserViewSet)
+router.register(r'groups', views.GroupViewSet)
+router.register(r'sectors', views.SectorViewSet)
+router.register(r'charities', views.CharityViewSet)
+router.register(r'links', views.LinkViewSet)
+router.register(r'rules', views.RuleViewSet)
+router.register(r'suggestions', views.SuggestionViewSet)
+
+
+# Wire up our API using automatic URL routing.
+# Additionally, we include login URLs for the browsable API.
 urlpatterns = [
+    url(r'^', include(router.urls)),
     url(r'^charityapp/', include('charityapp.urls')),
     url(r'^admin/', admin.site.urls),
     url(r'^auth/', include('rest_framework_social_oauth2.urls')),
+    url(r'^api-auth/', include('rest_framework.urls',
+                               namespace='rest_framework'))
 ]

@@ -25,7 +25,7 @@ SECRET_KEY = 'ie^)x#$tep@rlhol%6610ti8c&o9trwie_*+a_mmojo5*grubd'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -40,6 +40,8 @@ INSTALLED_APPS = [
     'oauth2_provider',
     'social_django',
     'rest_framework_social_oauth2',
+    'rest_framework',
+    'charityapp.apps.CharityappConfig'
 ]
 
 MIDDLEWARE = [
@@ -88,7 +90,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'hophacks_db',
-        'USER': 'postgres',
+        'USER': 'andrew',
         'PASSWORD': 'whalewatching',
         'HOST': 'colab-sbx-92.oit.duke.edu',
         'PORT': '',
@@ -143,7 +145,7 @@ SOCIAL_AUTH_FACEBOOK_PROFILE_EXTRA_PARAMS = {
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'US/Eastern'
 
 USE_I18N = True
 
@@ -155,4 +157,17 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.10/howto/static-files/
 
+STATIC_ROOT = '/home/bitnami/hophacks-2017-project/hophacks/hophacks/static'
+#STATIC_URL = '/home/bitnami/hophacks-2017-project/hophacks/hophacks/'
 STATIC_URL = '/static/'
+STATICFILES_DIRS = ( os.path.join(BASE_DIR, 'static'),
+)
+
+REST_FRAMEWORK = {
+    # Use Django's standard `django.contrib.auth` permissions,
+    # or allow read-only access for unauthenticated users.
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAdminUser',
+    ],
+    'PAGE_SIZE': 10
+}
