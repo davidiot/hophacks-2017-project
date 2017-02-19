@@ -129,7 +129,11 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.10/howto/static-files/
 
+STATIC_ROOT = '/home/bitnami/hophacks-2017-project/hophacks/hophacks/static'
+#STATIC_URL = '/home/bitnami/hophacks-2017-project/hophacks/hophacks/'
 STATIC_URL = '/static/'
+STATICFILES_DIRS = ( os.path.join(BASE_DIR, 'static'), 
+)
 
 REST_FRAMEWORK = {
     # Use Django's standard `django.contrib.auth` permissions,
