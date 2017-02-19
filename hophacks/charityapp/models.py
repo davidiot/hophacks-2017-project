@@ -58,6 +58,10 @@ class Link(models.Model):
     purchase_id = models.TextField()
     transfer_id = models.TextField()
     sector = models.ForeignKey(Sector, on_delete=models.CASCADE)
+    merchant = models.TextField()
+    date = models.DateField()
+    purchase_amount = models.DecimalField(max_digits=20, decimal_places=2)
+    transfer_amount = models.DecimalField(max_digits=20, decimal_places=2)
 
     class Meta:
         ordering = ('sector',)

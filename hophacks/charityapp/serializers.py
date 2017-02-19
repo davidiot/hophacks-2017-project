@@ -84,7 +84,8 @@ class CharitySerializer(serializers.HyperlinkedModelSerializer):
 class LinkSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Link
-        fields = ('url', 'id', 'purchase_id', 'transfer_id', 'sector')
+        fields = ('url', 'id', 'purchase_id', 'transfer_id', 'sector',
+                  'merchant', 'date', 'purchase_amount', 'transfer_amount')
 
 
 class RuleSerializer(serializers.HyperlinkedModelSerializer):
