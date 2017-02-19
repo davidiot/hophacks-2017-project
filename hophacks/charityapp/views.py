@@ -49,3 +49,8 @@ class RuleViewSet(viewsets.ModelViewSet):
 class SuggestionViewSet(viewsets.ModelViewSet):
     queryset = Suggestion.objects.all()
     serializer_class = SuggestionSerializer
+
+
+class DonationViewSet(viewsets.ModelViewSet):
+    queryset = Donation.objects.all()
+    serializer_class = DonationSerializer

@@ -82,3 +82,9 @@ class Suggestion(models.Model):
 
     class Meta:
         ordering = ('-threshold', 'sector', 'name')
+
+
+class Donation(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    charity = models.ForeignKey(Charity, on_delete=models.CASCADE)
+    purchase_id = models.TextField()
