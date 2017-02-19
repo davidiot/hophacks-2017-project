@@ -104,4 +104,4 @@ class SuggestionSerializer(serializers.HyperlinkedModelSerializer):
 class DonationSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Donation
-        fields = ('url', 'id', 'user', 'sector', 'rate')
+        fields = ('url', 'id', 'user', 'charity', 'purchase_id')
