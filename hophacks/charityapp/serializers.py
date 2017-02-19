@@ -1,4 +1,5 @@
 from django.contrib.auth.models import User, Group
+from .models import *
 from rest_framework import serializers
 from .models import Profile
 
@@ -60,3 +61,9 @@ class GroupSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Group
         fields = ('url', 'name')
+
+
+class SectorSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Sector
+        fields = ('name', 'national_average')
