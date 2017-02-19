@@ -1,6 +1,7 @@
 from rest_framework.response import Response
-from .models import Link, Sector, Rule, Charity, Suggestion
-from .serializers import LinkSerializer, CharitySerializer, SuggestionSerializer
+from .models import Link, Sector, Rule, Charity, Suggestion, Donation
+from .serializers import LinkSerializer, CharitySerializer, \
+    SuggestionSerializer, DonationSerializer, UserSerializer
 from rest_framework.decorators import api_view
 import datetime
 import requests
@@ -24,6 +25,59 @@ charity_map = {
 }
 
 api_key = '52f69545ffa7fffb30dc369ac3103f7f'
+
+
+@api_view(['GET'])
+def get_my_id(request):
+    current_user = request.user
+    serializer = UserSerializer(
+        current_user,
+        context={'request': request}
+    )
+    return Response(serializer.data)
+
+
+@api_view(['POST'])
+def make_donation(request):
+    current_user = request.user
+    charity_id = request.POST['charity_id']
+    charity = Charity.objects.get(id=charity_id)
+    amount = request.POST['amount']
+
+    purchase_url = 'http://api.reimaginebanking.com/acounts/{}' \
+                   '/purchases?key={}'\
+        .format(current_user.profile.charity_account_id, api_key)
+
+    date = datetime.datetime.now().strftime("%Y-%m-%d")
+
+    payload = {
+        "merchant_id": charity.merchant_id,
+        "medium": "balance",
+        "purchase_date": date,
+        "amount": amount,
+        "description": "A donation of {} made to {} from {}".format(
+            amount,
+            charity.name,
+            current_user.username)
+    }
+
+    purchase_response = requests.post(
+        purchase_url,
+        data=json.dumps(payload),
+        headers={'content-type': 'application/json'}
+    ).json()
+
+    donation = Donation.objects.create(
+        user=current_user,
+        charity=charity,
+        purchase_id=purchase_response["objectCreated"]["_id"]
+    )
+
+    serializer = DonationSerializer(
+        donation,
+        context={'request': request}
+    )
+    return Response(serializer.data)
 
 
 @api_view(['GET'])

@@ -6,6 +6,8 @@ urlpatterns = [
     url(r'^$', views.index, name='index'),
     url(r'^pull/', controller.pull_purchases, name='pull'),
     url(r'^spending/', controller.get_spending, name='spending'),
+    url(r'^donate/', controller.make_donation, name='donate'),
+    url(r'^uid/', controller.get_my_id, name='uid'),
     url(r'^suggestions/', controller.get_displayed_suggestions,
         name='suggestions'),
     url(r'^charities/name/(?P<sect>\w{0,50})/$',
