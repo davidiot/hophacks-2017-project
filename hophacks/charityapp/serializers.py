@@ -67,3 +67,29 @@ class SectorSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Sector
         fields = ('name', 'national_average')
+
+
+class CharitySerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Charity
+        fields = ('merchant_id', 'picture', 'description', 'link', 'email',
+                  'name', 'sector')
+
+
+class LinkSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Link
+        fields = ('purchase_id', 'transfer_id', 'sector')
+
+
+class RuleSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Link
+        fields = ('user', 'sector', 'rate')
+
+
+class SuggestionSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Link
+        fields = ('name', 'sector', 'picture', 'description', 'rule_creator',
+                  'threshold')

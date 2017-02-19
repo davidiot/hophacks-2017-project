@@ -22,6 +22,11 @@ router = routers.DefaultRouter()
 router.register(r'users', views.UserViewSet)
 router.register(r'groups', views.GroupViewSet)
 router.register(r'sectors', views.SectorViewSet)
+router.register(r'charities', views.CharityViewSet)
+router.register(r'links', views.LinkViewSet)
+router.register(r'rules', views.RuleViewSet)
+router.register(r'suggestions', views.SuggestionViewSet)
+
 
 # Wire up our API using automatic URL routing.
 # Additionally, we include login URLs for the browsable API.

@@ -29,3 +29,23 @@ class GroupViewSet(viewsets.ModelViewSet):
 class SectorViewSet(viewsets.ModelViewSet):
     queryset = Sector.objects.all()
     serializer_class = SectorSerializer
+
+
+class CharityViewSet(viewsets.ModelViewSet):
+    queryset = Charity.objects.all()
+    serializer_class = CharitySerializer
+
+
+class LinkViewSet(viewsets.ModelViewSet):
+    queryset = Link.objects.all()
+    serializer_class = LinkSerializer
+
+
+class RuleViewSet(viewsets.ModelViewSet):
+    queryset = Rule.objects.all()
+    serializer_class = RuleSerializer
+
+
+class SuggestionViewSet(viewsets.ModelViewSet):
+    queryset = Suggestion.objects.all()
+    serializer_class = SuggestionSerializer
