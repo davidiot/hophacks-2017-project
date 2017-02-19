@@ -17,6 +17,7 @@ from django.contrib import admin
 from django.conf.urls import url, include
 from rest_framework import routers
 from charityapp import views
+from rest_framework.authtoken import views as v
 
 router = routers.DefaultRouter()
 router.register(r'users', views.UserViewSet)
@@ -35,8 +36,7 @@ urlpatterns = [
     url(r'^', include(router.urls)),
     url(r'^charityapp/', include('charityapp.urls')),
     url(r'^admin/', admin.site.urls),
-    url(r'^o/', include('oauth2_provider.urls', namespace='oauth2_provider')),
-    url(r'^auth/', include('rest_framework_social_oauth2.urls')),
     url(r'^api-auth/', include('rest_framework.urls',
-                               namespace='rest_framework'))
+                               namespace='rest_framework')),
+    url(r'^api-token-auth/', v.obtain_auth_token)
 ]

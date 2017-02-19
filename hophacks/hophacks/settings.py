@@ -37,13 +37,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'oauth2_provider',
-    'corsheaders',
-    'social_django',
-    'rest_framework_social_oauth2',
     'rest_framework',
     'charityapp.apps.CharityappConfig',
-    'rest_framework.authtoken'
+    'rest_framework.authtoken',
+    'corsheaders'
 ]
 
 MIDDLEWARE = [
@@ -133,21 +130,8 @@ REST_FRAMEWORK = {
 }
 
 AUTHENTICATION_BACKENDS = (
-    'social_core.backends.facebook.FacebookAppOAuth2',
-    'social_core.backends.facebook.FacebookOAuth2',
-   'rest_framework_social_oauth2.backends.DjangoOAuth2',
    'django.contrib.auth.backends.ModelBackend',
 )
-
-# Facebook configuration
-SOCIAL_AUTH_FACEBOOK_KEY = '1846286268990758'
-SOCIAL_AUTH_FACEBOOK_SECRET = 'f988e6a6ee87778586e4168f4ab331ad'
-
-# Define SOCIAL_AUTH_FACEBOOK_SCOPE to get extra permissions from facebook. Email is not sent by default, to get it, you must request the email permission:
-SOCIAL_AUTH_FACEBOOK_SCOPE = ['email']
-SOCIAL_AUTH_FACEBOOK_PROFILE_EXTRA_PARAMS = {
-    'fields': 'id, name, email'
-}
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.10/topics/i18n/
