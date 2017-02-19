@@ -39,12 +39,13 @@ def get_my_id(request):
 
 @api_view(['POST'])
 def make_donation(request):
+    body = request.data
     current_user = request.user
-    charity_id = request.body['charity_id']
+    charity_id = body['charity_id']
     charity = Charity.objects.get(id=charity_id)
-    amount = request.body['amount']
+    amount = body['amount']
 
-    purchase_url = 'http://api.reimaginebanking.com/acounts/{}' \
+    purchase_url = 'http://api.reimaginebanking.com/accounts/{}' \
                    '/purchases?key={}'\
         .format(current_user.profile.charity_account_id, api_key)
 
@@ -55,7 +56,7 @@ def make_donation(request):
         "medium": "balance",
         "purchase_date": date,
         "amount": amount,
-        "description": "A donation of {} made to {} from {}".format(
+        "description": "A donation of ${} made to {} from {}".format(
             amount,
             charity.name,
             current_user.username)
@@ -213,7 +214,7 @@ def get_links_from_c1(request, serialize=True):
                         "amount": purchase_amount * float(rule.rate),
                         "transaction_date": date,
                         "description": "A pledge to charity made to match {}\'s"
-                                       " purchase of {} from {}".format(
+                                       " purchase of ${} from {}".format(
                             current_user.username,
                             purchase_amount,
                             merchant_response['name']
