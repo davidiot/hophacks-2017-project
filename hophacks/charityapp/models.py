@@ -40,7 +40,7 @@ class Charity(models.Model):
     link = models.TextField()
     email = models.EmailField()
     name = models.CharField(max_length=100)
-    sector = models.OneToOneField(Sector, on_delete=models.CASCADE)
+    sector = models.ForeignKey(Sector, on_delete=models.CASCADE)
 
     class Meta:
         ordering = ('name',)
