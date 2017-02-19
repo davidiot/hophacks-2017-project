@@ -1,6 +1,7 @@
 from rest_framework.response import Response
-from .models import Link, Sector, Rule, Charity
-from .serializers import LinkSerializer, CharitySerializer
+from .models import Link, Sector, Rule, Charity, Suggestion, Donation
+from .serializers import LinkSerializer, CharitySerializer, \
+    SuggestionSerializer, DonationSerializer, UserSerializer
 from rest_framework.decorators import api_view
 import datetime
 import requests
@@ -22,6 +23,110 @@ charity_map = {
     'Health': 'Health',
     'Technology': 'Tech'
 }
+
+api_key = '52f69545ffa7fffb30dc369ac3103f7f'
+
+
+@api_view(['GET'])
+def get_my_id(request):
+    current_user = request.user
+    serializer = UserSerializer(
+        current_user,
+        context={'request': request}
+    )
+    return Response(serializer.data)
+
+
+@api_view(['POST'])
+def make_donation(request):
+    current_user = request.user
+    charity_id = request.POST['charity_id']
+    charity = Charity.objects.get(id=charity_id)
+    amount = request.POST['amount']
+
+    purchase_url = 'http://api.reimaginebanking.com/acounts/{}' \
+                   '/purchases?key={}'\
+        .format(current_user.profile.charity_account_id, api_key)
+
+    date = datetime.datetime.now().strftime("%Y-%m-%d")
+
+    payload = {
+        "merchant_id": charity.merchant_id,
+        "medium": "balance",
+        "purchase_date": date,
+        "amount": amount,
+        "description": "A donation of {} made to {} from {}".format(
+            amount,
+            charity.name,
+            current_user.username)
+    }
+
+    purchase_response = requests.post(
+        purchase_url,
+        data=json.dumps(payload),
+        headers={'content-type': 'application/json'}
+    ).json()
+
+    donation = Donation.objects.create(
+        user=current_user,
+        charity=charity,
+        purchase_id=purchase_response["objectCreated"]["_id"]
+    )
+
+    serializer = DonationSerializer(
+        donation,
+        context={'request': request}
+    )
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+def get_spending(request):
+    spending = calculate_spending(request)
+    return Response(spending)
+
+
+def calculate_spending(request):
+    spending = {}
+    links = get_links_from_c1(request, serialize=False)
+    for link in links:
+        url = 'http://api.reimaginebanking.com/purchases/{}?key={}'.format(
+            link.purchase_id, api_key)
+        purchase = requests.get(
+            url,
+            headers={'content-type': 'application/json'},
+        ).json()
+        try:
+            spending[link.sector.name] = \
+                spending[link.sector.name] + purchase['amount']
+        except KeyError:
+            spending[link.sector.name] = purchase['amount']
+
+    for sector_name in spending:
+        spending[sector_name] = round(spending[sector_name], 2)
+
+    return spending
+
+
+@api_view(['GET'])
+def get_displayed_suggestions(request):
+    spending = calculate_spending(request)
+    output = []
+    for sector_name in spending:
+        sect = Sector.objects.get(name=sector_name)
+        na = float(sect.national_average)
+        output.extend(
+            Suggestion.objects.filter(
+                sector=sect,
+                threshold__lte=((spending[sector_name] - na) / na * 100)
+            )
+        )
+    serializer = SuggestionSerializer(
+        output,
+        context={'request': request},
+        many=True
+    )
+    return Response(serializer.data)
 
 
 @api_view(['GET'])
@@ -54,19 +159,19 @@ def get_charities_by_id(request, id):
 
 @api_view(['GET'])
 def pull_purchases(request):
+    return get_links_from_c1(request)
+
+
+def get_links_from_c1(request, serialize=True):
     current_user = request.user
     customer_id = current_user.profile.customer_id
-    api_key = '52f69545ffa7fffb30dc369ac3103f7f'
     account_url = 'http://api.reimaginebanking.com/customers/' \
                   '{}/accounts?key={}'.format(customer_id, api_key)
-
     account_response = requests.get(
         account_url,
         headers={'content-type': 'application/json'},
     ).json()
-
     links = []
-
     for account in [x for x in account_response
                     if x['_id'] != current_user.profile.charity_account_id]:
         account_id = account['_id']
@@ -130,7 +235,8 @@ def pull_purchases(request):
                              .create(purchase_id=purchase['_id'],
                                      transfer_id=trans,
                                      sector=sect))
-
+    if not serialize:
+        return links
     serializer = LinkSerializer(links,
                                 context={'request': request},
                                 many=True)

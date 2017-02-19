@@ -99,3 +99,9 @@ class SuggestionSerializer(serializers.HyperlinkedModelSerializer):
         fields = ('url', 'id', 'name', 'sector', 'picture', 'description',
                   'rule_creator',
                   'threshold')
+
+
+class DonationSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Donation
+        fields = ('url', 'id', 'user', 'charity', 'purchase_id')

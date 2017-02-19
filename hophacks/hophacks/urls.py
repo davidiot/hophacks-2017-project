@@ -27,6 +27,7 @@ router.register(r'charities', views.CharityViewSet)
 router.register(r'links', views.LinkViewSet)
 router.register(r'rules', views.RuleViewSet)
 router.register(r'suggestions', views.SuggestionViewSet)
+router.register(r'donations', views.DonationViewSet)
 
 
 # Wire up our API using automatic URL routing.
