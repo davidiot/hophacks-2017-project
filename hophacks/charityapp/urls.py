@@ -5,6 +5,9 @@ from . import views, controller
 urlpatterns = [
     url(r'^$', views.index, name='index'),
     url(r'^pull/', controller.pull_purchases, name='pull'),
+    url(r'^spending/', controller.get_spending, name='spending'),
+    url(r'^suggestions/', controller.get_displayed_suggestions,
+        name='suggestions'),
     url(r'^charities/name/(?P<sect>\w{0,50})/$',
         controller.get_charities_by_name,
         name='filtercharitiesbyname'),
