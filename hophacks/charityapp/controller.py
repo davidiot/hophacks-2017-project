@@ -47,6 +47,10 @@ def calculate_spending(request):
                 spending[link.sector.name] + purchase['amount']
         except KeyError:
             spending[link.sector.name] = purchase['amount']
+
+    for sector_name in spending:
+        spending[sector_name] = round(spending[sector_name], 2)
+
     return spending
 
 
@@ -60,7 +64,7 @@ def get_displayed_suggestions(request):
         output.extend(
             Suggestion.objects.filter(
                 sector=sect,
-                threshold__lte=((spending[sector_name] - na) / na)
+                threshold__lte=((spending[sector_name] - na) / na * 100)
             )
         )
     serializer = SuggestionSerializer(
