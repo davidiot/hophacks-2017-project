@@ -60,7 +60,7 @@ def get_displayed_suggestions(request):
         output.extend(
             Suggestion.objects.filter(
                 sector=sect,
-                threshold__gte=((spending[sector_name] - na) / na)
+                threshold__lte=((spending[sector_name] - na) / na)
             )
         )
     serializer = SuggestionSerializer(
