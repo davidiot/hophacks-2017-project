@@ -40,9 +40,9 @@ def get_my_id(request):
 @api_view(['POST'])
 def make_donation(request):
     current_user = request.user
-    charity_id = request.POST['charity_id']
+    charity_id = request.body['charity_id']
     charity = Charity.objects.get(id=charity_id)
-    amount = request.POST['amount']
+    amount = request.body['amount']
 
     purchase_url = 'http://api.reimaginebanking.com/acounts/{}' \
                    '/purchases?key={}'\
