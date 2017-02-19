@@ -29,6 +29,9 @@ class Sector(models.Model):
     national_average = models.DecimalField(max_digits=20, decimal_places=2)
     name = models.CharField(max_length=100)
 
+    class Meta:
+        ordering = ('name',)
+
 
 class Charity(models.Model):
     merchant_id = models.TextField()
@@ -39,17 +42,26 @@ class Charity(models.Model):
     name = models.CharField(max_length=100)
     sector = models.OneToOneField(Sector, on_delete=models.CASCADE)
 
+    class Meta:
+        ordering = ('name',)
+
 
 class Link(models.Model):
     purchase_id = models.TextField()
     transfer_id = models.TextField()
     sector = models.OneToOneField(Sector, on_delete=models.CASCADE)
 
+    class Meta:
+        ordering = ('sector',)
+
 
 class Rule(models.Model):
     sector = models.ForeignKey(Sector, on_delete=models.CASCADE)
     rate = models.DecimalField(max_digits=6, decimal_places=4)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    class Meta:
+        ordering = ('sector',)
 
 
 class Suggestion(models.Model):
@@ -59,3 +71,6 @@ class Suggestion(models.Model):
     description = models.TextField()
     rule_creator = models.BooleanField(default=False)
     threshold = models.DecimalField(max_digits=6, decimal_places=4)
+
+    class Meta:
+        ordering = ('-threshold', 'sector', 'name')
