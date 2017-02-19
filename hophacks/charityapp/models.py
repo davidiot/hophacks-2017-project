@@ -49,7 +49,7 @@ class Charity(models.Model):
 class Link(models.Model):
     purchase_id = models.TextField()
     transfer_id = models.TextField()
-    sector = models.OneToOneField(Sector, on_delete=models.CASCADE)
+    sector = models.ForeignKey(Sector, on_delete=models.CASCADE)
 
     class Meta:
         ordering = ('sector',)
