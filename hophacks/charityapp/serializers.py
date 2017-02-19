@@ -7,7 +7,7 @@ from .models import Profile
 class ProfileSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Profile
-        fields = ('customer_id',)
+        fields = ('customer_id', 'charity_account_id')
 
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
@@ -84,13 +84,13 @@ class LinkSerializer(serializers.HyperlinkedModelSerializer):
 
 class RuleSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
-        model = Link
+        model = Rule
         fields = ('url', 'id', 'user', 'sector', 'rate')
 
 
 class SuggestionSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
-        model = Link
+        model = Suggestion
         fields = ('url', 'id', 'name', 'sector', 'picture', 'description',
                   'rule_creator',
                   'threshold')
